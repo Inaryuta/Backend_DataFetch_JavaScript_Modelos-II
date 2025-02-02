@@ -32,21 +32,21 @@ async function extractData() {
     const partidos = [];
     const fechas = document.querySelectorAll('.fixtures__date-container');
 
-    fechas.forEach((fecha) => {
-      const jornada = fecha.querySelector('.fixtures__date')?.getAttribute('datetime')?.trim();
-      const partidos_jornada = fecha.querySelectorAll('.matchList li');
-
-      partidos_jornada.forEach((partido) => {
+    for (let i = 0; i < fechas.length; i++) {
+      const jornada = fechas[i].querySelector('.fixtures__date')?.getAttribute('datetime')?.trim();
+      const partidos_jornada = fechas[i].querySelectorAll('.matchList li');
+    
+      for (let j = 0; j < partidos_jornada.length; j++) {
+        const partido = partidos_jornada[j];
         const marcador = partido.querySelector('.match-fixture__score')?.textContent.trim();
-        const data_partido = {
+        partidos.push({
           local: partido.getAttribute('data-home'),
           visitante: partido.getAttribute('data-away'),
           marcador: marcador || 'No disponible',
           fecha: jornada || 'Fecha no disponible'
-        };
-        partidos.push(data_partido);
-      });
-    });
+        });
+      }
+    }    
 
     return partidos;
   });
@@ -72,7 +72,8 @@ async function extractAdditionalData() {
       });
 
       if (response.data && response.data.content.length > 0) {
-        response.data.content.forEach(match => {
+        for (let i = 0; i < response.data.content.length; i++) {
+          const match = response.data.content[i];
           allMatches.push({
             id: match.id,
             local: normalizeName(match.teams[0].team.name),
@@ -80,7 +81,7 @@ async function extractAdditionalData() {
             estadio: match.ground.name,
             ciudad: match.ground.city
           });
-        });
+        }
         pageNum++;
       } else {
         hasMoreData = false;
@@ -96,33 +97,49 @@ async function extractAdditionalData() {
 
 // Une y ordena los datos
 function sortData(matchData, apiData) {
-  return matchData.map(match => {
-    const normalizedLocal = normalizeName(match.local);
-    const normalizedVisitante = normalizeName(match.visitante);
+  const sortedData = [];
+for (let i = 0; i < matchData.length; i++) {
+  const match = matchData[i];
+  const normalizedLocal = normalizeName(match.local);
+  const normalizedVisitante = normalizeName(match.visitante);
 
-    // Buscar coincidencias exactas entre la web y la api
-    let additionalInfo = apiData.find(apiMatch =>
-      apiMatch.local === normalizedLocal && apiMatch.visitante === normalizedVisitante
-    );
+  // Buscar coincidencias exactas entre la web y la api
+  let additionalInfo = null;
+  for (let j = 0; j < apiData.length; j++) {
+    if (
+      apiData[j].local === normalizedLocal &&
+      apiData[j].visitante === normalizedVisitante
+    ) {
+      additionalInfo = apiData[j];
+      break; // Sale del bucle al encontrar el primer partido coincidente
+    }
+  }
 
-    // Si no hay coincidencia exacta, buscar una coincidencia flexible
-    if (!additionalInfo) {
-      additionalInfo = apiData.find(apiMatch =>
+  // Si no hay coincidencia exacta, buscar una coincidencia flexible
+  if (!additionalInfo) {
+    for (let k = 0; k < apiData.length; k++) {
+      const apiMatch = apiData[k];
+      if (
         normalizedLocal.includes(apiMatch.local) || apiMatch.local.includes(normalizedLocal) ||
         normalizedVisitante.includes(apiMatch.visitante) || apiMatch.visitante.includes(normalizedVisitante)
-      );
+      ) {
+        additionalInfo = apiMatch;
+        break;
+      }
     }
+  }
 
-    return {
-      id: additionalInfo?.id || 'No disponible',
-      local: match.local,
-      visitante: match.visitante,
-      marcador: match.marcador,
-      fecha: match.fecha,
-      estadio: additionalInfo?.estadio || 'No disponible',
-      ciudad: additionalInfo?.ciudad || 'No disponible'
-    };
+  sortedData.push({
+    id: additionalInfo ? additionalInfo.id : 'No disponible',
+    local: match.local,
+    visitante: match.visitante,
+    marcador: match.marcador,
+    fecha: match.fecha,
+    estadio: additionalInfo ? additionalInfo.estadio : 'No disponible',
+    ciudad: additionalInfo ? additionalInfo.ciudad : 'No disponible'
   });
+  }
+  return sortedData;
 }
 
 // Exposicion de datos en un endpoint HTTP
