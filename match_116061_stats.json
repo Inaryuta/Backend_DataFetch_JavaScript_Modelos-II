@@ -1,0 +1,42 @@
+{
+  "Possession %": {
+    "homeTeam": "47",
+    "awayTeam": "53"
+  },
+  "Shots on target": {
+    "homeTeam": "7",
+    "awayTeam": "1"
+  },
+  "Shots": {
+    "homeTeam": "13",
+    "awayTeam": "9"
+  },
+  "Touches": {
+    "homeTeam": "628",
+    "awayTeam": "659"
+  },
+  "Passes": {
+    "homeTeam": "443",
+    "awayTeam": "489"
+  },
+  "Tackles": {
+    "homeTeam": "13",
+    "awayTeam": "15"
+  },
+  "Clearances": {
+    "homeTeam": "30",
+    "awayTeam": "19"
+  },
+  "Corners": {
+    "homeTeam": "5",
+    "awayTeam": "6"
+  },
+  "Offsides": {
+    "homeTeam": "3",
+    "awayTeam": "1"
+  },
+  "Fouls conceded": {
+    "homeTeam": "7",
+    "awayTeam": "13"
+  }
+}
