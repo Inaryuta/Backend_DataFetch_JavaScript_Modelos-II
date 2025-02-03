@@ -1,80 +1,106 @@
 const { setTimeout } = require('node:timers/promises');
 const puppeteer = require('puppeteer');
-const fs = require('fs');
-const express = require('express');
+const fs = require('fs'); 
+const express = require('express'); 
 
 const app = express();
 const PORT = 3000;
-const MATCH_ID = 116065; // Change this value to consult a specific match
 
-function extractStats(page, callback) {
-    page.$$eval('.matchCentreStatsContainer tr', rows => {
-        return rows.map(row => {
-            const text = row.textContent.trim();
-            const cells = text.split(/\s+/);
-            return {
-                statName: cells.slice(1, -1).join(' '),
-                statValueHome: cells[0],
-                statValueAway: cells[cells.length - 1]
-            };
+async function extractStats(page) {
+  const stats = {};
+
+  // Extract statistics rows
+  const rows = await page.$$eval('.matchCentreStatsContainer tr', (rows) => {
+    const result = [];
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      const text = row.textContent.trim();
+      const match = text.match(/^(\d+(\.\d+)?)\s+(.+?)\s+(\d+(\.\d+)?)$/);
+
+      if (match) {
+        result.push({
+          statName: match[3], // stats name
+          statValueHome: match[1], // local value
+          statValueAway: match[4], // away value
         });
-    }).then(data => {
-        const stats = {};
-        data.forEach(row => {
-            stats[row.statName] = {
-                homeTeam: row.statValueHome,
-                awayTeam: row.statValueAway
-            };
-        });
-        callback(stats);
-    });
+      }
+    }
+    return result;
+  });
+
+  // Map data to the `stats` object
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    stats[row.statName] = {
+      homeTeam: row.statValueHome,
+      awayTeam: row.statValueAway,
+    };
+  }
+
+  return stats;
 }
 
-function scrapeMatchData(matchId, callback) {
-    puppeteer.launch({ headless: true }).then(browser => {
-        browser.newPage().then(page => {
-            const url = `https://www.premierleague.com/match/${matchId}`;
-            page.goto(url).then(() => {
-                page.waitForSelector('#onetrust-reject-all-handler').then(() => {
-                    page.click('#onetrust-reject-all-handler').then(() => {
-                        setTimeout(3000).then(() => {
-                            page.waitForSelector('.tablist').then(() => {
-                                page.$('.tablist li[data-tab-index="2"]').then(statsButton => {
-                                    if (statsButton) {
-                                        statsButton.click().then(() => {
-                                            console.log("📊 Clicked on the 'Stats' button.");
-                                            page.waitForSelector('.mcStatsTab').then(() => {
-                                                extractStats(page, stats => {
-                                                    const outputFile = `match_${matchId}_stats.json`;
-                                                    fs.writeFileSync(outputFile, JSON.stringify(stats, null, 2));
-                                                    console.log(`Stats saved to ${outputFile}`);
-                                                    browser.close();
-                                                    callback(stats);
-                                                });
-                                            });
-                                        });
-                                    } else {
-                                        console.log("Couldn't find the 'Stats' button.");
-                                        browser.close();
-                                    }
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        });
-    });
+// Main function to extract data from a match
+async function scrapeMatchData(matchId) {
+  // Start browser
+  const browser = await puppeteer.launch({ headless: true });
+  const page = await browser.newPage();
+
+  // Build the URL with the match ID
+  const url = `https://www.premierleague.com/match/${matchId}`;
+  await page.goto(url);
+  await page.waitForSelector('#onetrust-reject-all-handler');
+  await page.click('#onetrust-reject-all-handler');
+  await setTimeout(3000);
+
+  // Wait for the page to load and make sure the button is present
+  await page.waitForSelector('.tablist');
+
+  // Search and click in "Stats" button
+  const statsButton = await page.$('.tablist li[data-tab-index="2"]');
+  if (statsButton) {
+    await statsButton.click();
+    console.log("Clicked on the 'Stats' button.");
+  } else {
+    console.log("Couldn't find the 'Stats' button.");
+    await browser.close();
+    return;
+  }
+
+  await page.waitForSelector('.mcStatsTab');
+  const stats = await extractStats(page);
+  await browser.close();
+  return stats;
 }
 
-// Endpoint para consultar estadísticas de un partido
-app.get('/match-stats', (req, res) => {
-    scrapeMatchData(MATCH_ID, stats => {
-        res.json({ matchId: MATCH_ID, stats });
-    });
-});
+function saveStatsToFile(stats, matchId) {
+  const outputFile = `match_${matchId}_stats.json`;
+  fs.writeFileSync(outputFile, JSON.stringify(stats, null, 2));
+  console.log(`Stats saved to ${outputFile}`);
+}
 
-// Inicia el servidor
-app.listen(PORT, () => {
-    console.log(`Server running in http://localhost:${PORT}/match-stats`);
-});
+function setupHttpEndpoint(stats, matchId) {
+  app.get(`/match-stats/${matchId}`, (req, res) => {
+    res.json(stats);
+  });
+
+  app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}/match-stats/${matchId}`);
+  });
+}
+
+// Pipeline 
+(async () => {
+  const matchId = 116059; // Match ID (change to check another match)
+
+  console.log(`Iniciando extracción de datos para el partido ${matchId}...`);
+
+  const stats = await scrapeMatchData(matchId);
+
+  if (stats) {
+    saveStatsToFile(stats, matchId);
+    setupHttpEndpoint(stats, matchId);
+  } else {
+    console.log("No se pudieron extraer estadísticas.");
+  }
+})();

@@ -1,0 +1,16 @@
+{
+  "matchId": 116059,
+  "player": {
+    "name": "Djed Spence",
+    "position": "Defender",
+    "imageUrl": "https://resources.premierleague.com/premierleague/photos/players/110x140/p232859.png"
+  },
+  "statistics": {
+    "Goals": "0",
+    "Assists": "0",
+    "Goals Conceded": "0",
+    "Interceptions": "1",
+    "Successful Tackles": "3",
+    "Pass Completion %": "83.8%"
+  }
+}
