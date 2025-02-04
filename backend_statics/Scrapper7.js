@@ -1,7 +1,7 @@
 const { setTimeout } = require('node:timers/promises');
 const puppeteer = require('puppeteer');
-const fs = require('fs'); // Para guardar el JSON
-const express = require('express'); // Para el endpoint HTTP
+const fs = require('fs'); 
+const express = require('express'); 
 
 const app = express();
 const PORT = 3000;
@@ -86,13 +86,11 @@ async function extractTableData() {
   }
 }
 
-// Guardar los datos en un archivo JSON
 function saveTableDataToFile(data) {
   fs.writeFileSync('premier_league_data.json', JSON.stringify(data, null, 2), 'utf-8');
   console.log('Datos guardados en premier_league_data.json');
 }
 
-// Endpoint HTTP para exponer los datos
 function setupHttpEndpoint(data) {
   app.get('/table-data', (req, res) => {
     res.json(data);
@@ -111,10 +109,9 @@ function setupHttpEndpoint(data) {
   const tableData = await extractTableData();
 
   if (tableData) {
-    // Guardar los datos en un archivo JSON
+    
     saveTableDataToFile(tableData);
 
-    // Configurar el endpoint HTTP
     setupHttpEndpoint(tableData);
   } else {
     console.log("No se pudieron extraer datos de la tabla.");

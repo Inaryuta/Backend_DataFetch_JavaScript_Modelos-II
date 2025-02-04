@@ -1,7 +1,7 @@
 const { setTimeout } = require('node:timers/promises');
 const puppeteer = require('puppeteer');
-const fs = require('fs'); // Para guardar el JSON
-const express = require('express'); // Para el endpoint HTTP
+const fs = require('fs'); 
+const express = require('express'); 
 
 const app = express();
 const PORT = 3000;
@@ -91,14 +91,12 @@ async function scrapeMatchData(matchId) {
   }
 }
 
-// Guardar los datos en un archivo JSON
 function saveStatsToFile(stats, matchId) {
   const outputFile = `match_${matchId}_stats.json`;
   fs.writeFileSync(outputFile, JSON.stringify(stats, null, 2));
   console.log(`Stats saved to ${outputFile}`);
 }
 
-// Endpoint HTTP para exponer los datos
 function setupHttpEndpoint(stats, matchId) {
   app.get(`/match-stats/${matchId}`, (req, res) => {
     res.json(stats);
@@ -111,7 +109,7 @@ function setupHttpEndpoint(stats, matchId) {
 
 // Pipeline principal
 (async () => {
-  const matchId = 116061; // ID del partido de ejemplo
+  const matchId = 116061; // Match ID (change to check another match)
 
   console.log(`Iniciando extracción de datos para el partido ${matchId}...`);
 
@@ -119,10 +117,9 @@ function setupHttpEndpoint(stats, matchId) {
   const stats = await scrapeMatchData(matchId);
 
   if (stats) {
-    // Guardar los datos en un archivo JSON
+    
     saveStatsToFile(stats, matchId);
 
-    // Configurar el endpoint HTTP
     setupHttpEndpoint(stats, matchId);
   } else {
     console.log("No se pudieron extraer estadísticas.");
