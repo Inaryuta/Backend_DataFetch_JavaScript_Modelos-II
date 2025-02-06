@@ -58,7 +58,7 @@ function setupHttpEndpoint(clubData) {
   });
 
   app.listen(PORT, () => {
-    console.log(`📡 Servidor corriendo en http://localhost:${PORT}/club-badges`);
+    console.log(`Servidor corriendo en http://localhost:${PORT}/club-badges`);
   });
 }
 

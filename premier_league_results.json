@@ -1,0 +1,72 @@
+[
+  {
+    "date": "Fri Aug 16 2024",
+    "homeTeam": "Manchester United",
+    "awayTeam": "Fulham",
+    "score": "1 - 0",
+    "matchId": "115827"
+  },
+  {
+    "date": "Sat Aug 17 2024",
+    "homeTeam": "Ipswich Town",
+    "awayTeam": "Liverpool",
+    "score": "0 - 2",
+    "matchId": "115830"
+  },
+  {
+    "date": "Sat Aug 17 2024",
+    "homeTeam": "Arsenal",
+    "awayTeam": "Wolverhampton Wanderers",
+    "score": "2 - 0",
+    "matchId": "115828"
+  },
+  {
+    "date": "Sat Aug 17 2024",
+    "homeTeam": "Everton",
+    "awayTeam": "Brighton & Hove Albion",
+    "score": "0 - 3",
+    "matchId": "115829"
+  },
+  {
+    "date": "Sat Aug 17 2024",
+    "homeTeam": "Newcastle United",
+    "awayTeam": "Southampton",
+    "score": "1 - 0",
+    "matchId": "115831"
+  },
+  {
+    "date": "Sat Aug 17 2024",
+    "homeTeam": "Nottingham Forest",
+    "awayTeam": "Bournemouth",
+    "score": "1 - 1",
+    "matchId": "115832"
+  },
+  {
+    "date": "Sat Aug 17 2024",
+    "homeTeam": "West Ham United",
+    "awayTeam": "Aston Villa",
+    "score": "1 - 2",
+    "matchId": "115833"
+  },
+  {
+    "date": "Sun Aug 18 2024",
+    "homeTeam": "Brentford",
+    "awayTeam": "Crystal Palace",
+    "score": "2 - 1",
+    "matchId": "115834"
+  },
+  {
+    "date": "Sun Aug 18 2024",
+    "homeTeam": "Chelsea",
+    "awayTeam": "Manchester City",
+    "score": "0 - 2",
+    "matchId": "115835"
+  },
+  {
+    "date": "Mon Aug 19 2024",
+    "homeTeam": "Leicester City",
+    "awayTeam": "Tottenham Hotspur",
+    "score": "1 - 1",
+    "matchId": "115836"
+  }
+]
