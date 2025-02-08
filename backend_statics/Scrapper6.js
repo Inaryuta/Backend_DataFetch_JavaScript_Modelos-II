@@ -1,129 +1,71 @@
-const { setTimeout } = require('node:timers/promises');
-const puppeteer = require('puppeteer');
-const fs = require('fs'); 
-const express = require('express'); 
+const axios = require('axios');
 
-const app = express();
-const PORT = 3000;
-
-// Función principal para extraer datos de "Head-to-Head"
-async function scrapeMatchData(matchId) {
-  // Iniciar el navegador
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
-
+// Función para obtener partidos ya jugados
+async function getPlayedMatches() {
   try {
-    // Navegar a la URL del partido
-    const url = `https://www.premierleague.com/match/${matchId}`;
-    await page.goto(url, { waitUntil: 'networkidle2' });
-
-    // Manejar el pop-up de cookies
-    const cookieSelector = '#onetrust-reject-all-handler';
-    if (await page.$(cookieSelector) !== null) {
-      await page.click(cookieSelector);
-      await setTimeout(3000); // Esperar a que la página reaccione
-    }
-
-    // Hacer clic en el botón "Stats"
-    const statsButtonSelector = '.tablist li[data-tab-index="2"]';
-    if (await page.$(statsButtonSelector) !== null) {
-      await page.click(statsButtonSelector);
-      console.log("Clicked on the 'Stats' button.");
-      await setTimeout(3000); // Esperar a que las estadísticas se carguen
-    } else {
-      console.log("Couldn't find the 'Stats' button.");
-      await browser.close();
-      return;
-    }
-
-    // Hacer clic en el botón "Head-to-Head"
-    const headToHeadButtonSelector = '.tablist li[data-tab-index="0"]';
-    if (await page.$(headToHeadButtonSelector) !== null) {
-      await page.click(headToHeadButtonSelector);
-      console.log("Clicked on the 'Head-to-Head' button.");
-      await setTimeout(3000); // Esperar a que el contenido se cargue
-    } else {
-      console.log("Couldn't find the 'Head-to-Head' button.");
-      await browser.close();
-      return;
-    }
-
-    // Extraer los datos de "Head-to-Head"
-    const headToHeadData = await page.evaluate(() => {
-      // Función para encontrar el valor de "Total Wins"
-      const getTotalWins = (container) => {
-        const statRows = container.querySelectorAll('.statRow');
-        for (let i = 0; i < statRows.length; i++) {
-          const row = statRows[i];
-          const stat = row.querySelector('.stat');
-          if (stat && stat.textContent.trim() === 'Total Wins') {
-            const count = row.querySelector('.count');
-            return count ? count.textContent.trim() : '0';
-          }
-        }
-        return '0';
-      };
-
-      const team1Name = document.querySelector('.headToHeadTableLeft .team').textContent.trim();
-      const team1Wins = getTotalWins(document.querySelector('.headToHeadTableLeft'));
-      const team2Name = document.querySelector('.headToHeadTableRight .team').textContent.trim();
-      const team2Wins = getTotalWins(document.querySelector('.headToHeadTableRight'));
-      const draws = document.querySelector('.middle-section .draws span').textContent.trim();
-
-      return {
-        team1Name,
-        team1Wins,
-        team2Name,
-        team2Wins,
-        draws,
-      };
-    });
-
-    // Cerrar el navegador
-    await browser.close();
-
-    return headToHeadData;
+    const url = 'https://footballapi.pulselive.com/football/fixtures?comps=1&compSeasons=719&teams=1,2,127,130,131,4,6,7,34,8,26,10,11,12,23,15,20,21,25,38&page=0&pageSize=20&sort=desc&statuses=A,C&altIds=true&fast=false';
+    const response = await axios.get(url);
+    return response.data;
   } catch (error) {
-    console.error('Error during scraping:', error);
+    console.error('Error fetching played matches:', error);
     return null;
-  } finally {
-    await browser.close();
   }
 }
 
-// Guardar los datos en un archivo JSON
-function saveHeadToHeadDataToFile(headToHeadData, matchId) {
-  const outputFile = `match_${matchId}_head_to_head.json`;
-  fs.writeFileSync(outputFile, JSON.stringify(headToHeadData, null, 2));
-  console.log(`Head-to-Head data saved to ${outputFile}`);
-}
+// Función para obtener partidos "Head to Head" entre dos equipos
+async function getHeadToHead(team1Id, team2Id) {
+  const playedMatches = await getPlayedMatches();
 
-// Endpoint HTTP para exponer los datos
-function setupHttpEndpoint(headToHeadData, matchId) {
-  app.get(`/head-to-head/${matchId}`, (req, res) => {
-    res.json(headToHeadData);
+  if (!playedMatches) {
+    console.log("No se pudieron obtener los partidos ya jugados.");
+    return null;
+  }
+
+  // Filtrar partidos donde ambos equipos hayan participado
+  const headToHeadMatches = playedMatches.content.filter(match => {
+    const teamIds = match.teams.map(team => team.team.id);
+    return teamIds.includes(team1Id) && teamIds.includes(team2Id);
   });
 
-  app.listen(PORT, () => {
-    console.log(`Server running in http://localhost:${PORT}/head-to-head/${matchId}`);
-  });
+  return headToHeadMatches;
 }
 
-// Pipeline principal
+// Función para analizar los resultados de los partidos "Head to Head"
+function analyzeHeadToHead(headToHeadMatches, team1Id, team2Id) {
+  const results = {
+    team1Wins: 0,
+    team2Wins: 0,
+    draws: 0,
+    matches: headToHeadMatches.length,
+  };
+
+  headToHeadMatches.forEach(match => {
+    const team1 = match.teams.find(team => team.team.id === team1Id);
+    const team2 = match.teams.find(team => team.team.id === team2Id);
+
+    if (team1.score > team2.score) {
+      results.team1Wins++;
+    } else if (team2.score > team1.score) {
+      results.team2Wins++;
+    } else {
+      results.draws++;
+    }
+  });
+
+  return results;
+}
+
+// Ejemplo de uso
 (async () => {
-  const matchId = 116061; // Match ID (change to check another match)
+  const team1Id = 1; // ID del primer equipo (por ejemplo, Arsenal)
+  const team2Id = 2; // ID del segundo equipo (por ejemplo, Aston Villa)
 
-  console.log(`Iniciando extracción de datos para el partido ${matchId}...`);
+  const headToHeadMatches = await getHeadToHead(team1Id, team2Id);
 
-  // Extraer los datos de "Head-to-Head"
-  const headToHeadData = await scrapeMatchData(matchId);
-
-  if (headToHeadData) {
-   
-    saveHeadToHeadDataToFile(headToHeadData, matchId);
-
-    setupHttpEndpoint(headToHeadData, matchId);
+  if (headToHeadMatches && headToHeadMatches.length > 0) {
+    const headToHeadResults = analyzeHeadToHead(headToHeadMatches, team1Id, team2Id);
+    console.log(`Resultados Head to Head entre los equipos ${team1Id} y ${team2Id}:`, headToHeadResults);
   } else {
-    console.log("No se pudieron extraer datos de 'Head-to-Head'.");
+    console.log("No se encontraron partidos Head to Head entre los equipos especificados.");
   }
 })();
