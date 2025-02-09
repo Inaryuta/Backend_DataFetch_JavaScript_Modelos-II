@@ -1,0 +1,39 @@
+@startuml
+actor "Usuario" as user
+
+rectangle "Servidor Principal (main.js)" {
+  usecase "Consultar Datos (endpoints)" as UC1
+  usecase "Llamar a Scrappers" as UC2
+  usecase "Recolección de Datos Haskell" as UC3
+}
+
+rectangle "Scrappers" {
+  usecase "Scrapper Badges" as Scr1
+  usecase "Scrapper Fixtures" as Scr2
+  usecase "Scrapper Head to Head" as Scr3
+  usecase "Scrapper Match Stats" as Scr4
+  usecase "Scrapper Matches Results" as Scr5
+  usecase "Scrapper MVP" as Scr6
+  usecase "Scrapper Premier Table" as Scr7
+}
+
+user --> UC1 : Realiza solicitud\nal servidor
+UC1 --> UC2 : Solicita datos a\nlos scrappers
+UC2 --> Scr1 : Llama a API Badges
+UC2 --> Scr2 : Llama a API Fixtures
+UC2 --> Scr3 : Llama a API Head to Head
+UC2 --> Scr4 : Llama a API Match Stats
+UC2 --> Scr5 : Llama a API Matches Results
+UC2 --> Scr6 : Llama a API MVP
+UC2 --> Scr7 : Llama a API Premier Table
+
+UC2 --> UC3 : Procesa datos con Haskell
+Scr1 --> UC2 : Devuelve datos
+Scr2 --> UC2 : Devuelve datos
+Scr3 --> UC2 : Devuelve datos
+Scr4 --> UC2 : Devuelve datos
+Scr5 --> UC2 : Devuelve datos
+Scr6 --> UC2 : Devuelve datos
+Scr7 --> UC2 : Devuelve datos
+UC3 --> user : Devuelve datos\nprocesados al usuario
+@enduml
