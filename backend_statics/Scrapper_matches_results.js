@@ -4,7 +4,7 @@ const axios = require('axios');
 
 const app = express();
 const PORT = 3000;
-const API_URL = 'https://footballapi.pulselive.com/football/fixtures?comps=1&compSeasons=719&statuses=A,C&altIds=true';
+const API_URL = 'https://footballapi.pulselive.com/football/fixtures?comps=1&compSeasons=719&teams=1,2,127,130,131,4,6,7,34,8,26,10,11,12,23,15,20,21,25,38&page=0&pageSize=20&sort=desc&statuses=A,C&altIds=true&fast=false';
 
 // Función para obtener los resultados desde la API
 async function fetchMatchResults() {
@@ -14,7 +14,7 @@ async function fetchMatchResults() {
         const matches = [];
 
         // Extraer solo la información necesaria
-        for (let i = 0; i < Math.min(fixtures.length, 15); i++) {
+        for (let i = 0; i < Math.min(fixtures.length, 10); i++) {
             const fixture = fixtures[i];
 
             const match = {
@@ -22,7 +22,8 @@ async function fetchMatchResults() {
                 homeTeam: fixture.teams[0].team.name,
                 awayTeam: fixture.teams[1].team.name,
                 score: `${fixture.teams[0].score} - ${fixture.teams[1].score}`,
-                matchId: fixture.id.toString()
+                matchId: fixture.id.toString(),
+                mvpId: fixture.altIds.opta,
             };
 
             matches.push(match);
