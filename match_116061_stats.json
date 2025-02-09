@@ -1,42 +1,29 @@
 {
-  "Possession %": {
-    "homeTeam": "47",
-    "awayTeam": "53"
-  },
-  "Shots on target": {
-    "homeTeam": "7",
-    "awayTeam": "1"
-  },
-  "Shots": {
-    "homeTeam": "13",
-    "awayTeam": "9"
-  },
-  "Touches": {
-    "homeTeam": "628",
-    "awayTeam": "659"
-  },
-  "Passes": {
-    "homeTeam": "443",
-    "awayTeam": "489"
-  },
-  "Tackles": {
-    "homeTeam": "13",
-    "awayTeam": "15"
-  },
-  "Clearances": {
-    "homeTeam": "30",
-    "awayTeam": "19"
-  },
-  "Corners": {
-    "homeTeam": "5",
-    "awayTeam": "6"
-  },
-  "Offsides": {
-    "homeTeam": "3",
-    "awayTeam": "1"
-  },
-  "Fouls conceded": {
-    "homeTeam": "7",
-    "awayTeam": "13"
+  "matchId": "116061",
+  "teams": {
+    "7": {
+      "possession": 47,
+      "shotsOnTarget": 7,
+      "shots": 13,
+      "touches": 628,
+      "passes": 443,
+      "clearances": 30,
+      "tackles": 13,
+      "corners": 5,
+      "offsides": 3,
+      "foulsConceded": 13
+    },
+    "26": {
+      "possession": 53,
+      "passes": 489,
+      "touches": 659,
+      "tackles": 15,
+      "clearances": 19,
+      "foulsConceded": 6,
+      "corners": 6,
+      "shots": 9,
+      "shotsOnTarget": 1,
+      "offsides": 1
+    }
   }
 }

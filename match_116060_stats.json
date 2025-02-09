@@ -1,0 +1,30 @@
+{
+  "matchId": "116060",
+  "teams": {
+    "4": {
+      "possession": 67.9,
+      "touches": 779,
+      "passes": 597,
+      "shots": 22,
+      "foulsConceded": 10,
+      "tackles": 23,
+      "corners": 4,
+      "clearances": 14,
+      "shotsOnTarget": 3,
+      "yellowCards": 3
+    },
+    "25": {
+      "possession": 32.1,
+      "foulsConceded": 11,
+      "touches": 477,
+      "passes": 280,
+      "clearances": 34,
+      "tackles": 14,
+      "corners": 3,
+      "shotsOnTarget": 5,
+      "shots": 14,
+      "yellowCards": 1,
+      "offsides": 1
+    }
+  }
+}
