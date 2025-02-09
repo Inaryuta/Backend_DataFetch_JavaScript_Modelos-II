@@ -1,102 +1,52 @@
 [
   {
-    "homeTeam": "Chelsea",
-    "awayTeam": "West Ham United",
-    "matchTime": "3/2/2025, 15:00:00"
-  },
-  {
-    "homeTeam": "Arsenal",
-    "awayTeam": "Manchester City",
-    "matchTime": "2/2/2025, 11:30:00"
-  },
-  {
-    "homeTeam": "Brentford",
-    "awayTeam": "Tottenham Hotspur",
-    "matchTime": "2/2/2025, 9:00:00"
-  },
-  {
-    "homeTeam": "Manchester United",
+    "homeTeam": "Newcastle United",
     "awayTeam": "Crystal Palace",
-    "matchTime": "2/2/2025, 9:00:00"
-  },
-  {
-    "homeTeam": "Wolverhampton Wanderers",
-    "awayTeam": "Aston Villa",
-    "matchTime": "1/2/2025, 12:30:00"
-  },
-  {
-    "homeTeam": "Bournemouth",
-    "awayTeam": "Liverpool",
-    "matchTime": "1/2/2025, 10:00:00"
+    "matchTime": "Invalid Date"
   },
   {
     "homeTeam": "Everton",
-    "awayTeam": "Leicester City",
-    "matchTime": "1/2/2025, 10:00:00"
-  },
-  {
-    "homeTeam": "Ipswich Town",
-    "awayTeam": "Southampton",
-    "matchTime": "1/2/2025, 10:00:00"
-  },
-  {
-    "homeTeam": "Newcastle United",
-    "awayTeam": "Fulham",
-    "matchTime": "1/2/2025, 10:00:00"
-  },
-  {
-    "homeTeam": "Nottingham Forest",
-    "awayTeam": "Brighton & Hove Albion",
-    "matchTime": "1/2/2025, 7:30:00"
-  },
-  {
-    "homeTeam": "Fulham",
-    "awayTeam": "Manchester United",
-    "matchTime": "26/1/2025, 14:00:00"
-  },
-  {
-    "homeTeam": "Aston Villa",
-    "awayTeam": "West Ham United",
-    "matchTime": "26/1/2025, 11:30:00"
-  },
-  {
-    "homeTeam": "Crystal Palace",
-    "awayTeam": "Brentford",
-    "matchTime": "26/1/2025, 9:00:00"
-  },
-  {
-    "homeTeam": "Tottenham Hotspur",
-    "awayTeam": "Leicester City",
-    "matchTime": "26/1/2025, 9:00:00"
-  },
-  {
-    "homeTeam": "Manchester City",
-    "awayTeam": "Chelsea",
-    "matchTime": "25/1/2025, 12:30:00"
-  },
-  {
-    "homeTeam": "Bournemouth",
-    "awayTeam": "Nottingham Forest",
-    "matchTime": "25/1/2025, 10:00:00"
+    "awayTeam": "Liverpool",
+    "matchTime": "12/2/2025, 14:30:00"
   },
   {
     "homeTeam": "Brighton & Hove Albion",
-    "awayTeam": "Everton",
-    "matchTime": "25/1/2025, 10:00:00"
+    "awayTeam": "Chelsea",
+    "matchTime": "14/2/2025, 15:00:00"
   },
   {
-    "homeTeam": "Liverpool",
+    "homeTeam": "Leicester City",
+    "awayTeam": "Arsenal",
+    "matchTime": "15/2/2025, 7:30:00"
+  },
+  {
+    "homeTeam": "Aston Villa",
     "awayTeam": "Ipswich Town",
-    "matchTime": "25/1/2025, 10:00:00"
+    "matchTime": "15/2/2025, 10:00:00"
+  },
+  {
+    "homeTeam": "Fulham",
+    "awayTeam": "Nottingham Forest",
+    "matchTime": "15/2/2025, 10:00:00"
+  },
+  {
+    "homeTeam": "Manchester City",
+    "awayTeam": "Newcastle United",
+    "matchTime": "15/2/2025, 10:00:00"
   },
   {
     "homeTeam": "Southampton",
-    "awayTeam": "Newcastle United",
-    "matchTime": "25/1/2025, 10:00:00"
+    "awayTeam": "Bournemouth",
+    "matchTime": "15/2/2025, 10:00:00"
   },
   {
-    "homeTeam": "Wolverhampton Wanderers",
-    "awayTeam": "Arsenal",
-    "matchTime": "25/1/2025, 10:00:00"
+    "homeTeam": "West Ham United",
+    "awayTeam": "Brentford",
+    "matchTime": "15/2/2025, 10:00:00"
+  },
+  {
+    "homeTeam": "Crystal Palace",
+    "awayTeam": "Everton",
+    "matchTime": "15/2/2025, 12:30:00"
   }
 ]
