@@ -115,7 +115,7 @@ El servidor expone los siguientes endpoints:
 
 A continuación se presenta el diagrama de arquitectura del sistema, que describe la interacción entre los diferentes componentes y cómo el backend centraliza la recopilación de datos desde las APIs para luego procesarlos a través de Haskell.
 
-![Diagrama de Arquitectura](../Backend_DataFetch_JavaScript_Modelos-II/Diagramas/Diagrama_de_arquitectura.png)
+![Diagrama de Arquitectura](Diagramas/Diagrama_de_arquitectura.png)
 
 ---
 ## Instrucciones de Ejecución
