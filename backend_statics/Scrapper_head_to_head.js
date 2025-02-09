@@ -37,10 +37,11 @@ function setupHttpEndpoint(headToHeadData, matchId) {
   app.get(`/head-to-head/${matchId}`, (req, res) => {
     res.json(headToHeadData);
   });
-
+  /*
   app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}/head-to-head/${matchId}`);
   });
+  */
 }
 
 // Pipeline principal

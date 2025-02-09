@@ -40,7 +40,8 @@ app.get('/calendars', async (req, res) => {
   }
 });
 
-// Arrancamos el servidor
+/* Arrancamos el servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
+*/

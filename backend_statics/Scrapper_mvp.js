@@ -37,9 +37,11 @@ function setupHttpEndpoint(mvpData, matchId) {
     res.json(mvpData);
   });
 
+  /*
   app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}/mvp-stats/${matchId}`);
   });
+  */
 }
 
 // Pipeline principal

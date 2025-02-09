@@ -36,7 +36,8 @@ app.get('/fixtures', async (req, res) => {
     res.json(fixtures);
 });
 
-// Iniciar servidor
+/* Iniciar servidor
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}/fixtures`);
 });
+*/

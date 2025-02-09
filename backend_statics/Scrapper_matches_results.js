@@ -47,10 +47,12 @@ function setupHttpEndpoint(matches) {
     app.get('/match-results', (req, res) => {
         res.json(matches);
     });
-
+    
+    /*
     app.listen(PORT, () => {
         console.log(`Servidor corriendo en http://localhost:${PORT}/match-results`);
     });
+    */
 }
 
 // Pipeline
