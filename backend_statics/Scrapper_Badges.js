@@ -1,75 +1,46 @@
-const puppeteer = require('puppeteer');
-const fs = require('fs'); 
-const express = require('express'); 
+const fs = require('fs');
+const express = require('express');
+const axios = require('axios');
 
 const app = express();
 const PORT = 3000;
 
-// Main function to extract data
-async function extractClubBadges() {
-  // start browser
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
+// Endpoint que consume la URL y devuelve el JSON "formateado"
+app.get('/calendars', async (req, res) => {
+  try {
+    // URL completa con los parámetros incluidos
+    const url = 'https://api-cdn.ecal.com/apiv3/widget/button/widgetID/calendars?apiKey=6ea0955297341b6b22f516a42177979d55821c6d7217b&path=Fixture%2F%7B%7BECAL_USER_COUNTRYCODE%7D%7D%2F%7B%7BECAL_USER_LANGUAGECODE%7D%7D%2FPremier%20League%2CPL2%20-%20Division%201%2CPL2%20-%20Division%202%2CU18%20Premier%20League%20-%20North%2CU18%20Premier%20League%20-%20South';
 
-  // Navigate to the Premier League club page
-  await page.goto('https://www.premierleague.com/clubs', {
-    waitUntil: 'networkidle2', // Esperar a que la página cargue completamente
-  });
+    // Consumimos la URL de la API externa
+    const response = await axios.get(url);
 
-  // Extract club data
-  const clubData = await page.evaluate(() => {
-    const clubElements = document.querySelectorAll('li.clubList__club');
-    const clubData = [];
+    // Aquí tienes el JSON de la respuesta de la API
+    const jsonData = response.data;
 
-    // Go through the club elements
-    for (let i = 0; i < clubElements.length; i++) {
-      const element = clubElements[i];
-      const badgeImg = element.querySelector('img.js-badge-image');
-      const clubName = element.querySelector('.name');
+    // Filtramos los calendarios que nos interesan (del 1 al 21)
+    const filteredCalendars = {};
+    const calendarIds = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
 
-      // Verify if elements exists
-      if (badgeImg && clubName) {
-        clubData.push({
-          name: clubName.textContent.trim(), // Extract club name
-          badgeUrl: badgeImg.src, // Extrct Badge URL
-        });
+    calendarIds.forEach(id => {
+      if (jsonData.calendars && jsonData.calendars[id]) {
+        // Extraemos solo el name y logo del calendario
+        filteredCalendars[id] = {
+          name: jsonData.calendars[id].name,
+          logo: jsonData.calendars[id].logo
+        };
       }
-    }
+    });
 
-    return clubData;
-  });
+    // Respondemos con el JSON filtrado y formateado
+    res.json({ calendars: filteredCalendars });
+  } catch (error) {
+    // Si ocurre algún error, lo manejamos y respondemos un mensaje de error
+    console.error('Error al consumir la API:', error);
+    res.status(500).send('Error al consumir la API');
+  }
+});
 
-  // Close browser
-  await browser.close();
-
-  return clubData;
-}
-
-// Save data in JSON file
-function saveClubBadgesToFile(clubData) {
-  fs.writeFileSync('club_badge_data.json', JSON.stringify(clubData, null, 2));
-  console.log('Club badge URLs and names saved to club_badge_data.json');
-}
-
-// HTTP Endpoint to show data
-function setupHttpEndpoint(clubData) {
-  app.get('/club-badges', (req, res) => {
-    res.json(clubData);
-  });
-
-  app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}/club-badges`);
-  });
-}
-
-// Pipeline
-(async () => {
-  console.log("Iniciando extracción de datos...");
-
-  const clubData = await extractClubBadges();
-  console.log(`Extraídos ${clubData.length} clubes.`);
-
-  saveClubBadgesToFile(clubData);
-
-  setupHttpEndpoint(clubData);
-})();
+// Arrancamos el servidor
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
+});
