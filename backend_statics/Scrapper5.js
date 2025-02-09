@@ -3,7 +3,7 @@ const fs = require('fs');
 const express = require('express');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3002;
 
 // Función para extraer datos del MVP usando la API
 async function scrapeMVP(matchId) {
@@ -12,16 +12,21 @@ async function scrapeMVP(matchId) {
     const response = await axios.get(url);
     const mvpData = response.data;
 
-    console.log(`MVP del partido ${matchId}: ${mvpData.player.name} (${mvpData.player.position})`);
-    console.log(`Imagen del MVP: ${mvpData.player.imageUrl}`);
-    console.log('Estadísticas:', mvpData.statistics);
+    if (mvpData && mvpData.entity) {
+      console.log(`MVP del partido ${matchId}: ${mvpData.entity.name.display} (${mvpData.entity.info.position})`);
+      console.log(`Imagen del MVP: ${mvpData.entity.imageUrl}`);
+      console.log('Estadísticas:', mvpData.stats);
 
-    fs.writeFileSync('mvp_data.json', JSON.stringify(mvpData, null, 2), 'utf8');
-    console.log('Datos guardados en mvp_data.json');
+      fs.writeFileSync('mvp_data.json', JSON.stringify(mvpData, null, 2), 'utf8');
+      console.log('Datos guardados en mvp_data.json');
 
-    return mvpData;
+      return mvpData;
+    } else {
+      throw new Error('Datos del MVP no encontrados en la respuesta de la API');
+    }
   } catch (error) {
-    console.error('Error fetching MVP data:', error);
+    console.error('Error fetching MVP data:', error.message);
+    console.error('Error details:', error.response ? error.response.data : error);
     return null;
   }
 }
