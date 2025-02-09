@@ -3,7 +3,7 @@ const fs = require('fs');
 const express = require('express');
 
 const app = express();
-const PORT = 3003;
+const PORT = 3000;
 
 // Función para extraer estadísticas específicas del partido
 async function extractStats(matchId) {

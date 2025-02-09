@@ -3,7 +3,7 @@ const express = require('express');
 const axios = require('axios');
 
 const app = express();
-const PORT = 3006;
+const PORT = 3000;
 
 // Endpoint que consume la URL y devuelve el JSON "formateado"
 app.get('/standings', async (req, res) => {
