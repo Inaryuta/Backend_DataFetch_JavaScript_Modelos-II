@@ -11,13 +11,10 @@ async function fetchPollMVP(pollId) {
             return { error: "No hay resultados disponibles." };
         }
 
+        // Retornar solo el contenido de results, sin pollResult ni results
         return {
-            pollResult: {
-                results: {
-                    0: {
-                        id: data.pollResult.results[0].id
-                    }
-                }
+            0: {
+                id: data.pollResult.results[0].id
             }
         };
     } catch (error) {

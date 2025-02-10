@@ -48,7 +48,7 @@ async function fetchPremierTable() {
             }
         }
 
-        return { tables: formattedData };
+        return formattedData; // Cambio aquí para devolver directamente el arreglo
     } catch (error) {
         console.error("Error al obtener la tabla de posiciones:", error.message);
         throw new Error("No se pudo obtener la tabla de posiciones.");

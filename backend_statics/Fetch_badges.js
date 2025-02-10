@@ -21,7 +21,7 @@ async function fetchBadges() {
       }
     }
 
-    return { calendars: filteredCalendars };
+    return filteredCalendars; // Aquí está el cambio
   } catch (error) {
     console.error('Error al consumir la API:', error);
     throw new Error('Error al obtener los datos de la API');
