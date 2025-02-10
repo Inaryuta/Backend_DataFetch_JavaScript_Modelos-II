@@ -27,9 +27,9 @@ Los scrappers del proyecto están implementados con **programación imperativa**
 
 El proyecto está estructurado de la siguiente manera:
 
-### Scrappers Modulares
+### Fetchs Modulares
 
-- Cada módulo (scrapper) está diseñado para manejar diferentes aspectos de la información de la Premier League, como resultados de partidos, estadísticas de jugadores, etc.
+- Cada módulo (Fetch) está diseñado para manejar diferentes aspectos de la información de la Premier League, como resultados de partidos, estadísticas de jugadores, etc.
 - Los módulos ahora usan APIs para obtener los datos, eliminando la necesidad de web scraping.
 - La lógica de todos los módulos se centraliza en un único archivo (`main.js`), que se encarga de hacer las solicitudes y enviar todos los datos a un solo endpoint para su posterior análisis en Haskell.
 
@@ -62,10 +62,13 @@ Backend_DataFetch_JavaScript_Modelos-II/
 │   ├── Scrapper_Match_Stats.js    # Scrapper para obtener estadísticas de partidos
 │   ├── Scrapper_Matches_Results.js# Scrapper para obtener resultados de partidos
 │   ├── Scrapper_MVP.js            # Scrapper para obtener el MVP de un partido
-│   └── Scrapper_Premier_Table.js  # Scrapper para obtener la tabla de posiciones
-├── main.js                        # Punto de entrada del servidor
-├── package.json                   # Dependencias y configuración del proyecto
-└── README.md                      # Documentación del proyecto
+│   ├── Scrapper_Premier_Table.js  # Scrapper para obtener la tabla de posiciones
+│   ├───main.js                        # Punto de entrada del servidor
+│   ├──package.json                   # Dependencias y configuración del proyecto
+│   └──README.md                      # Documentación del proyecto
+├── Diagramas/
+│   ├──Diagrama_de_arquitectura.png
+│   ├──Diagrama_de_arquitectura.puml
 ```
 
 ## Endpoints Disponibles

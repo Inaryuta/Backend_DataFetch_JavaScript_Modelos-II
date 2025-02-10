@@ -6,11 +6,20 @@ const API_URL = 'https://footballapi.pulselive.com/football/fixtures?comps=1&tea
 async function fetchFixtures() {
     try {
         const response = await axios.get(API_URL);
-        const fixtures = response.data.content.map(match => ({
-            homeTeam: match.teams[0].team.name,
-            awayTeam: match.teams[1].team.name,
-            matchTime: new Date(match.kickoff.millis).toLocaleString()
-        }));
+        const fixturesData = response.data.content;
+        const fixtures = [];
+
+        // Reemplazando map con un ciclo for tradicional
+        for (let i = 0; i < fixturesData.length; i++) {
+            const match = fixturesData[i];
+            const fixture = {
+                homeTeam: match.teams[0].team.name,
+                awayTeam: match.teams[1].team.name,
+                matchTime: new Date(match.kickoff.millis).toLocaleString()
+            };
+            fixtures.push(fixture);
+        }
+        
         return fixtures;
     } catch (error) {
         console.error('Error al obtener los fixtures:', error);

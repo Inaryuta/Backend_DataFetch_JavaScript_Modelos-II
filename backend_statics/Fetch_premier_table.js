@@ -13,8 +13,13 @@ async function fetchPremierTable() {
         if (jsonData.tables && jsonData.tables[0] && jsonData.tables[0].entries) {
             const entries = jsonData.tables[0].entries.slice(0, 20);
 
-            entries.forEach(entry => {
-                const transformedForm = entry.form.map(match => {
+            // bucle for tradicional
+            for (let i = 0; i < entries.length; i++) {
+                const entry = entries[i];
+                const transformedForm = [];
+
+                for (let j = 0; j < entry.form.length; j++) {
+                    const match = entry.form[j];
                     let outcome;
 
                     if (match.outcome === 'D') {
@@ -25,8 +30,8 @@ async function fetchPremierTable() {
                         outcome = match.teams[0].team.name === entry.team.name ? 'W' : 'L';
                     }
 
-                    return { outcome };
-                });
+                    transformedForm.push({ outcome });
+                }
 
                 const teamData = {
                     team: { name: entry.team.name },
@@ -40,7 +45,7 @@ async function fetchPremierTable() {
                 };
 
                 formattedData.push(teamData);
-            });
+            }
         }
 
         return { tables: formattedData };

@@ -28,11 +28,17 @@ const scrapeMatchData = async (matchId) => {
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
 
-    // Extraer datos con Cheerio
+    // Función para extraer los "Total Wins"
     const getTotalWins = (container) => {
-      return $(container).find('.statRow').filter((_, row) =>
-        $(row).find('.stat').text().trim() === 'Total Wins'
-      ).find('.count').text().trim() || '0';
+      const rows = $(container).find('.statRow');
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const statText = $(row).find('.stat').text().trim();
+        if (statText === 'Total Wins') {
+          return $(row).find('.count').text().trim() || '0';
+        }
+      }
+      return '0';
     };
 
     const headToHeadData = {

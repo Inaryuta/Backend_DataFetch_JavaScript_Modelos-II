@@ -10,14 +10,16 @@ async function fetchBadges() {
     const filteredCalendars = {};
     const calendarIds = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
 
-    calendarIds.forEach(id => {
+    // Reemplazando el forEach con un ciclo for tradicional
+    for (let i = 0; i < calendarIds.length; i++) {
+      const id = calendarIds[i];
       if (jsonData.calendars && jsonData.calendars[id]) {
         filteredCalendars[id] = {
           name: jsonData.calendars[id].name,
           logo: jsonData.calendars[id].logo
         };
       }
-    });
+    }
 
     return { calendars: filteredCalendars };
   } catch (error) {
